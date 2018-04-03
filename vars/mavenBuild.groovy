@@ -85,8 +85,10 @@ def call(body) {
         }
 
         //Only run the Sonar quality gate and deploy stage for non PR builds
-        def qualityGateIsEnabled = true
-        if (!isPullRequest() && qualityGateIsEnabled) {
+        if (config.qualityGateIsEnabled == null) {
+            config.qualityGateIsEnabled = true
+        }
+        if (!isPullRequest() && config.qualityGateIsEnabled) {
             stage("Quality Gate") {
                 timeout(time: 15, unit: 'MINUTES') {
                     def qg = waitForQualityGate()

@@ -1,4 +1,4 @@
-def call(body, qualityGateIsEnabled = true) {
+def call(body) {
 
     def config = [:]
     def triggers = []
