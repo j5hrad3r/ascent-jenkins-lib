@@ -85,9 +85,6 @@ def call(body) {
         }
 
         //Only run the Sonar quality gate and deploy stage for non PR builds
-        if (config.qualityGateIsEnabled == null) {
-            config.qualityGateIsEnabled = 'true'
-        }
         def isEnabled = true
         if (config.qualityGateIsEnabled == 'false') {
             isEnabled = false
