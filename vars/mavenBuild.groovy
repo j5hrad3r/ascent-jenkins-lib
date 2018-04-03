@@ -10,7 +10,7 @@ def call(body) {
     }
 
     def tmpDir = pwd(tmp: true)
-    
+
 
     if (config.mavenSettings == null) {
         config.mavenSettings = "${tmpDir}/settings.xml"
@@ -19,7 +19,7 @@ def call(body) {
             writeFile file: config.mavenSettings, text: mavenSettings
         }
     }
-    
+
     def mvnCmd = "mvn -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true -Dmaven.wagon.http.ssl.allowall=true -Ddockerfile.skip=true -DskipITs=true -s ${config.mavenSettings}"
 
     dir("${config.directory}") {
@@ -41,7 +41,7 @@ def call(body) {
 
         try {
             stage('Unit Testing') {
-                sh "${mvnCmd} -Dmaven.test.failure.ignore=true test"   
+                sh "${mvnCmd} -Dmaven.test.failure.ignore=true test"
             }
         } finally {
             step([$class: 'JUnitResultArchiver', testResults: '**/surefire-reports/*.xml', healthScaleFactor: 1.0, allowEmptyResults: true])
@@ -68,7 +68,7 @@ def call(body) {
         stage('Code Analysis') {
             //See https://docs.sonarqube.org/display/SONAR/Analysis+Parameters for more info on Sonar analysis configuration
 
-            
+
             withSonarQubeEnv('CI') {
                 if (isPullRequest()) {
                     //Repo parameter needs to be <org>/<repo name>
@@ -85,7 +85,8 @@ def call(body) {
         }
 
         //Only run the Sonar quality gate and deploy stage for non PR builds
-        if (!isPullRequest()) {
+        def qualityGateIsEnabled = true
+        if (!isPullRequest() && qualityGateIsEnabled) {
             stage("Quality Gate") {
                 timeout(time: 15, unit: 'MINUTES') {
                     def qg = waitForQualityGate()
