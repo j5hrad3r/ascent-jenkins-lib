@@ -88,12 +88,11 @@ def call(body) {
         if (config.qualityGateIsEnabled == null) {
             config.qualityGateIsEnabled = 'true'
         }
-
-        if (config.qualityGateIsEnabled == 'true') {
-          def isEnabled = true
-        } else if (config.qualityGateIsEnabled == 'false') {
+        def isEnabled = true
+        if (config.qualityGateIsEnabled == 'false') {
           def isEnabled = false
-        }
+        } 
+        echo "qualityGateIsEnabled is ${qualityGateIsEnabled}"
         if (!isPullRequest() && isEnabled) {
             stage("Quality Gate") {
                 timeout(time: 15, unit: 'MINUTES') {

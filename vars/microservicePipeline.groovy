@@ -50,7 +50,7 @@ def call(body) {
             }
 
             dir("${config.directory}") {
-
+                echo "qualityGateIsEnabled is ${config.qualityGateIsEnabled}"
                 mavenBuild {
                     qualityGateIsEnabled = config.qualityGateIsEnabled
                     directory = config.directory
