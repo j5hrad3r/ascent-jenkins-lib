@@ -31,6 +31,7 @@ def call(body) {
             echo "Change Target: ${env.CHANGE_TARGET}"
             echo "ChangeSet Size: ${currentBuild.changeSets.size()}"
             echo "Pull Request?: ${isPullRequest()}"
+            echo "qualityGateIsEnabled: ${config.qualityGateIsEnabled}"
         }
 
         stage('Maven Build') {
@@ -86,10 +87,10 @@ def call(body) {
 
         //Only run the Sonar quality gate and deploy stage for non PR builds
         def isEnabled = true
+
         if (config.qualityGateIsEnabled == 'false') {
             isEnabled = false
         }
-        echo "qualityGateIsEnabled is ${qualityGateIsEnabled}"
         if (!isPullRequest() && isEnabled) {
             stage("Quality Gate") {
                 timeout(time: 15, unit: 'MINUTES') {
