@@ -18,6 +18,9 @@ def call(body) {
                 (config.imageName): config.directory
         ]
     }
+    if (config.qualityGateIsEnabled == null) {
+        config.qualityGateIsEnabled = 'true'
+    }
 
     node {
         properties([
@@ -49,7 +52,7 @@ def call(body) {
             dir("${config.directory}") {
 
                 mavenBuild {
-                    qualityGateIsEnabled = this.qualityGateIsEnabled
+                    qualityGateIsEnabled = config.qualityGateIsEnabled
                     directory = config.directory
                     mavenSettings = config.mavenSettings
                 }
