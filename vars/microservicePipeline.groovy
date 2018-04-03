@@ -1,4 +1,4 @@
-def call(body) {
+def call(body, qualityGateIsEnabled = true) {
 
     def config = [:]
     def triggers = []
@@ -43,12 +43,13 @@ def call(body) {
                     directory = config.directory
                     releaseVersion = this.params.releaseVersion
                     developmentVersion = this.params.developmentVersion
-                } 
+                }
             }
 
             dir("${config.directory}") {
 
                 mavenBuild {
+                    qualityGateIsEnabled = this.qualityGateIsEnabled
                     directory = config.directory
                     mavenSettings = config.mavenSettings
                 }
@@ -90,7 +91,7 @@ def call(body) {
                             echo "Failed due to ${ex}: ${ex.message}"
                             if (currentBuild.result == null) {
                                 currentBuild.result = 'FAILED'
-                            } 
+                            }
                         } finally {
                             undeployStack {}
                         }
@@ -120,7 +121,7 @@ def call(body) {
                                 echo "Failed due to ${ex}: ${ex.message}"
                                 if (currentBuild.result == null) {
                                     currentBuild.result = 'FAILED'
-                                } 
+                                }
                             } finally {
                                 undeployStack {
                                     dockerHost = "tcp://${this.env.PERF_SWARM_HOST}"
