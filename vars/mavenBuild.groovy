@@ -90,8 +90,8 @@ def call(body) {
         }
         def isEnabled = true
         if (config.qualityGateIsEnabled == 'false') {
-          def isEnabled = false
-        } 
+            isEnabled = false
+        }
         echo "qualityGateIsEnabled is ${qualityGateIsEnabled}"
         if (!isPullRequest() && isEnabled) {
             stage("Quality Gate") {
